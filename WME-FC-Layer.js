@@ -1973,7 +1973,7 @@
       fcMapLayers: [
         {
           layerID: 1,
-          layerPath: 'Geocortex/FC/MapServer/',
+          layerPath: 'FunctionalClass/MapServer/',
           fcPropName: 'FUNC_CLASS',
           idPropName: 'OBJECTID',
           outFields: ['OBJECTID', 'FUNC_CLASS', 'SEGMENT_NAME', 'ROUTE_NO'],
