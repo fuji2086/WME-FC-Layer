@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WME FC Layer
 // @namespace    https://greasyfork.org/users/45389
-// @version      2026.04.01.00
+// @version      2026.06.24.00
 // @description  Adds a Functional Class layer for states that publish ArcGIS FC data.
 // @author       MapOMatic / JS55CT
 // @match        *://*.waze.com/*editor*
@@ -111,7 +111,7 @@
   const downloadUrl = 'https://greasyfork.org/scripts/369633-wme-fc-layer/code/WME%20FC%20Layer.user.js';
 
   /** @type {string} Message displayed to user when a new script version is detected */
-  const updateMessage = 'Fix NH: for metadata name changes';
+  const updateMessage = 'Fix WI: for metadata name changes';
 
   /** @type {string} Layer name registered with SDK and displayed in layer controls */
   const layerName = 'FC Layer';
@@ -3015,33 +3015,33 @@
         {
           layerID: 1,
           layerPath: 'WI_Local_Roads_Flood_Damage_Assessment_Snapshot/FeatureServer/',
-          fcPropName: 'Functional_Class_Descr',
+          fcPropName: 'FNCT_CLS_TYCD',
           idPropName: 'OBJECTID',
-          outFields: ['OBJECTID', 'Functional_Class_Descr', 'ST_PRMY_SYMB_TY'],
+          outFields: ['OBJECTID', 'FNCT_CLS_TYCD', 'ST_PRMY_SYMB_TY'],
           roadTypeMap: {
-            Fw: ['09', '14', '15', '24', '25', '34', '49', '50', '51', '52', '53', '54', '55'],
+            Fw: [9, 14, 15, 24, 25, 34, 49, 50, 51, 52, 53, 54, 55],
             Ew: [],
-            MH: ['10', '60', '61', '62'],
-            mH: ['20', '70', '71', '72', '73', '74', '75', '76', '77', '78', '80', '81', '82', '83'],
-            PS: ['30', '31', '32', '33', '40', '41', '90', '91', '92', '93', '94', '95'],
-            St: ['45', '97'],
+            MH: [10, 60, 61, 62],
+            mH: [20, 70, 71, 72, 73, 74, 75, 76, 77, 78, 80, 81, 82, 83],
+            PS: [30, 31, 32, 33, 40, 41, 90, 91, 92, 93, 94, 95],
+            St: [45, 97],
           },
           maxRecordCount: 1000,
           supportsPagination: false,
         },
         {
-          layerID: 0,
+          layerID: 3,
           layerPath: 'FFCL_gdb/FeatureServer/',
-          fcPropName: 'FFCL_CD',
+          fcPropName: 'FED_FC_CD',
           idPropName: 'OBJECTID',
-          outFields: ['OBJECTID', 'FFCL_CD'],
+          outFields: ['OBJECTID', 'FED_FC_CD'],
           roadTypeMap: {
-            Fw: ['09', '14', '15', '24', '25', '34', '49', '50', '51', '52', '53', '54', '55'],
+            Fw: ['1', '2'],
             Ew: [],
-            MH: ['10', '60', '61', '62'],
-            mH: ['20', '70', '71', '72', '73', '74', '75', '76', '77', '78', '80', '81', '82', '83'],
-            PS: ['30', '31', '32', '33', '40', '41', '90', '91', '92', '93', '94', '95'],
-            St: ['45', '97'],
+            MH: ['3'],
+            mH: ['4'],
+            PS: ['5', '6'],
+            St: ['7'],
           },
           maxRecordCount: 1000,
           supportsPagination: false,
@@ -3056,6 +3056,11 @@
         return rank >= 3 || (rank >= 2 && isAM);
       },
       getWhereClause(context) {
+        if (context.layer.layerPath === 'FFCL_gdb/FeatureServer/') {
+          return "FED_FC_CD IS NOT NULL";
+        } else if (context.layer.layerPath === 'WI_Local_Roads_Flood_Damage_Assessment_Snapshot/FeatureServer/') {
+          return "FNCT_CLS_TYCD IS NOT NULL";
+        }
         return null;
       },
       getFeatureRoadType(feature, layer) {
@@ -3075,7 +3080,7 @@
             roadType = 'Mh';
           }
           return roadType;
-        }
+        } 
         return roadType;
       },
     },
